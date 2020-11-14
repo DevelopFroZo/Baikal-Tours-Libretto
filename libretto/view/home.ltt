@@ -1,0 +1,3 @@
+package view
+
+def home = page( "Baikal Events" ): "Hello world!"

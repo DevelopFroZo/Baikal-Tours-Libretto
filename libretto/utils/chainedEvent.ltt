@@ -1,0 +1,12 @@
+package utils
+  use com/teacode/data
+  use com/teacode/json
+
+  use model
+
+def chainedEventToJson( chainedEvent: data/Map? ) = json"{
+  "id": #{chainedEvent.int( 'id )},
+  "events": [#{chainedEvent.value( 'events ).*model/getEvents.*eventsToJson}]
+}"
+
+def chainedEventsToJson( chainedEvents: data/Map* ) = chainedEvents as chainedEvent.( chainedEventToJson( chainedEvent dyn #data/Map! ) )

@@ -1,0 +1,34 @@
+package control
+	use com/teacode/jetx
+	use com/teacode/jetx/q
+	use com/teacode/jetx/router
+	use com/teacode/jetx/params
+	use com/teacode/jetx/response
+	use libretto/web/in
+
+	use routes/events
+	use routes/companions
+	use routes/subjects
+	use routes/chainedEvents
+
+def process = jetx/process: {
+	out: response/out
+	step: params/read
+	
+	step: router/resolve: {
+		route( "/events" ): events/index_( in/method, in/bodyText )
+		route( "/events/:id" ): events/current( in/method, params.inte( 'id ) dyn #Int! )
+
+		route( "/companions" ): companions/index_( in/method, in/bodyText )
+
+		route( "/subjects" ): subjects/index_( in/method, in/bodyText )
+
+		route( "/chainedEvents" ): chainedEvents/index_( in/method, in/bodyText )
+		route( "/chainedEvents/:id" ): chainedEvents/current( in/method, in/bodyText, params.inte( 'id ) dyn #Int! )
+
+		route( "~" ):   packages( 'url )
+		q/route( "~" ): packages( 'ajax )
+	}
+
+	step: response/send
+}

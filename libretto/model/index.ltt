@@ -1,0 +1,7 @@
+package model
+  use com/teacode/data
+
+def root = data/root( data/dir( 'baikalevents ) )
+
+def getNextCounter = root.int( 'counter ).?( 0 ) + 1
+def saveCounter( c: Int! ) = root.set( 'counter, c )

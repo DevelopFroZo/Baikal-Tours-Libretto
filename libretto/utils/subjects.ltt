@@ -1,0 +1,10 @@
+package utils
+  use com/teacode/data
+  use com/teacode/json
+
+def subjectToJson( subject: data/Map? ) = json"{
+  "id": #{subject.int( 'id )},
+  "name": #{subject.string( 'name )}
+}"
+
+def subjectsToJson( subjects: data/Map* ) = subjects as subject.( subjectToJson( subject dyn #data/Map! ) )

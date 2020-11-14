@@ -1,0 +1,39 @@
+package routes/chainedEvents
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use model
+  use utils
+
+def createOne( chainedEvent: v2/Object! ) = data/w: {
+  fix id = model/saveChainedEvent( chainedEvent )
+
+  jetx/out: json"{
+    "payload": #{id}
+  }"
+}
+
+def getAll = data/w: jetx/out: {
+  json"{
+    "payload": [#{model/getChainedEvents.*utils/chainedEventsToJson}]
+  }"
+}
+
+def update( id: Int!, chainedEvent: v2/Object! ) = data/w: {
+  model/updateChainedEvent( id, chainedEvent )
+
+  jetx/out: json"{
+    "payload": null
+  }"
+}
+
+def index_( method: String!, event: String! ) = {
+  if( method == 'POST ) createOne( event.json/parseObject )
+  else if( method == 'GET ) getAll
+}
+
+def current( method: String!, chainedEvent: String!, id: Int! ) = {
+  if( method == 'PUT ) update( id, chainedEvent.json/parseObject )
+}

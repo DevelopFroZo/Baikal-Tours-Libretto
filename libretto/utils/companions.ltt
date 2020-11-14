@@ -1,0 +1,10 @@
+package utils
+  use com/teacode/data
+  use com/teacode/json
+
+def companionToJson( companion: data/Map? ) = json"{
+  "id": #{companion.int( 'id )},
+  "name": #{companion.string( 'name )}
+}"
+
+def companionsToJson( companions: data/Map* ) = companions as companion.( companionToJson( companion dyn #data/Map! ) )

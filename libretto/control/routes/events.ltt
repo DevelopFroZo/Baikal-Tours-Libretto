@@ -1,0 +1,41 @@
+package routes/events
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use model
+  use utils
+
+def createOne( event: v2/Object! ) = data/w: {
+  fix id = model/saveEvent( event )
+
+  jetx/out: json"{
+    "payload": #{id}
+  }"
+}
+
+def getAll = data/w: jetx/out: json"{
+  "payload": [#{model/getEvents.*utils/eventsToJson}]
+}"
+
+def getOne( id: Int! ) = data/w: {
+  fix event = model/getEvent( id )
+  var payload: v2/Object?
+
+  if( event.keys.*size == 0 ) payload = json"{ "payload": null }"
+  else payload = json"{
+    "payload": #{event.*utils/eventToJson}
+  }"
+
+  jetx/out: payload
+}
+
+def index_( method: String!, event: String! ) = {
+  if( method == 'POST ) createOne( event.json/parseObject )
+  else if( method == 'GET ) getAll
+}
+
+def current( method: String!, id: Int! ) = {
+  if( method == 'GET ) getOne( id )
+}

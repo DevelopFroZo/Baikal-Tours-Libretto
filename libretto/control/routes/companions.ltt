@@ -1,0 +1,27 @@
+package routes/companions
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use model
+  use utils
+
+def createOne( companion: v2/Object! ) = data/w: {
+  fix id = model/saveCompanion( companion )
+
+  jetx/out: json"{
+    "payload": #{id}
+  }"
+}
+
+def getAll = data/w: jetx/out: {
+  json"{
+    "payload": [#{model/getCompanions.*utils/companionsToJson}]
+  }"
+}
+
+def index_( method: String!, event: String! ) = {
+  if( method == 'POST ) createOne( event.json/parseObject )
+  else if( method == 'GET ) getAll
+}

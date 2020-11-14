@@ -1,0 +1,24 @@
+package model
+  use com/teacode/json/v2
+
+def events = root.gecr( 'events )
+
+def saveEvent( event: v2/Object! ) = {
+  fix id = getNextCounter
+  fix event_ = events.gecr( id )
+
+  event_.set( 'id, id )
+  event_.set( 'name, event.get( 'name ) )
+  event_.set( 'description, event.get( 'description ) )
+  event_.set( 'date_start, event.get( 'date_start ) )
+  event_.set( 'date_end, event.get( 'date_end ) )
+  event_.set( 'companions, event.get( 'companions ) )
+  event_.set( 'location, event.get( 'location ) )
+  event_.set( 'subjects, event.get( 'subjects ) )
+  saveCounter( id )
+  id
+}
+
+def getEvent( id: Int! ) = events.map( id )
+def getEvents = events.keys as key.( events.map( key ) )
+def getEvents( idsAny: Any? ) = ( idsAny dyn #v2/Array ).contents as id.( events.map( id ) )
