@@ -3,10 +3,9 @@ import { Column } from 'primereact/column';
 import Container from '../../../components/Container';
 import Header from '../../../components/header';
 import styles from './style.module.scss';
+import moment from 'moment';
 
 function Events({ events }) {
-    console.log(events)
-
     return (
         <Container>
             <Header isAdmin={true} url='/admin/events' />
@@ -18,7 +17,7 @@ function Events({ events }) {
                     <Column field='description' header='Description' className={`${styles.column} ${styles.column_description}`}></Column>
                     <Column field='date_start' header='Date start' sortable className={styles.column}></Column>
                     <Column field='date_end' header='Date end' sortable className={styles.column}></Column>
-    <Column field='companions' header='Companions' className={styles.column}></Column>
+                    <Column field='companions' header='Companions' className={styles.column}></Column>
                     <Column field='location' header='Location' className={styles.column}></Column>
                     <Column field='subjects' header='Subjects' className={styles.column}></Column>
                 </DataTable>
@@ -34,10 +33,11 @@ export async function getServerSideProps() {
 
     let { payload: events } = await res.json();
 
+    moment.locale('ru')
+
     events = events.map( el => {
-        el.date_start = (new Date(el.date_start)).toString();
-        el.date_end = (new Date(el.date_end)).toString();
-        console.log(el.subjects, typeof el.subjects)
+        el.date_start = moment(el.date_start).format('LL');
+        el.date_end = moment(el.date_end).format('LL');
         el.subjects = el.subjects.map( el1 => el1.name ).join(', ');
         el.companions = el.companions.map( el1 => el1.name ).join(', ');
 

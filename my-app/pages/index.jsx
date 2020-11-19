@@ -5,33 +5,51 @@ import { Card } from 'primereact/card';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
 
-export default function Home() {
+export default function Home({events}) {
+
+  console.log(events)
 
   const router = useRouter();
 
   return (
     <Container>
-      <Header url='events'/>
+      <Header url='/events'/>
 
       <ul className={`m-mt-5 ${styles.eventsList}`}>
-        <li className={styles.eventsItem}>
-          <Card 
-            title='Крутое событие'
-            footer={(
-              <span>
-                <Button 
-                  label='Смотреть' 
-                />
-              </span>
-            )}
-          >
-            <p>
-              Крайне крутое событие для крайне крутых чуваков
-            </p>
-          </Card>
-        </li>
+        {events.map((el, i) => 
+          <li className={styles.eventsItem} key={i}>
+            <Card 
+              title={el.name}
+              footer={(
+                <span>
+                  <Button 
+                    label='Смотреть'
+                    onClick={() => router.push(`/event?id=${el.id}`)}
+                  />
+                </span>
+              )}
+            >
+              <p>
+                {el.description}
+              </p>
+            </Card>
+          </li>
+        )}
+        
       </ul>
 
     </Container>
   )
+}
+
+export async function getServerSideProps(context){
+
+  const eventsResponse = await fetch('http://localhost:9064/events');
+  const {payload: events} = await eventsResponse.json();
+
+  return {
+    props: {
+      events
+    }
+  }
 }
