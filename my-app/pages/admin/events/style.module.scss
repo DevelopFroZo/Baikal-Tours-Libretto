@@ -1,0 +1,9 @@
+.column{
+    vertical-align: top;
+    &_id{
+        font-weight: bold;
+    }
+    &_description{
+        width: 30%;
+    }
+}
