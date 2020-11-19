@@ -4,7 +4,7 @@ import { TabMenu } from 'primereact/tabmenu';
 import { useRouter } from 'next/router';
 
 
-const Header = (isAdmin = false, url = 'events') => {
+const Header = ({isAdmin = false, url = '/events'}) => {
 
     const router = useRouter();
 
