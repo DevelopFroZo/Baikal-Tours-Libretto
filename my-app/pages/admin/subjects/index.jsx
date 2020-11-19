@@ -12,8 +12,8 @@ function Subjects({ subjects }) {
 
     async function click() {
         const res = await fetch(`http://localhost:${port}/subjects/`, {
-            method : 'POST',
-            body : {
+            method: 'POST',
+            body: {
                 name
             }
         })
@@ -21,14 +21,13 @@ function Subjects({ subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={true} url='/admin/subjects'/>
+            <Header isAdmin={true} url='/admin/subjects' />
             <h1>Subjects</h1>
             <div>
-                <h5>Name</h5>
-                <InputText
-                    placeholder='name'
-                    onChange={(e) => setName(e.target.value)}
-                />
+                <span className="p-float-label p-mt-4">
+                    <InputText value={name} onChange={(e) => setName(e.target.value)} />
+                    <label htmlFor="inputtext">Name</label>
+                </span>
                 <Button
                     icon='pi pi-plus'
                     label='Create new subject'
