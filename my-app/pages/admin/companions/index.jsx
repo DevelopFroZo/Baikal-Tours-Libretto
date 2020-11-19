@@ -5,12 +5,13 @@ import { Button } from 'primereact/button';
 import { useState } from 'react';
 import Container from '../../../components/Container';
 import Header from '../../../components/header';
+import port from '../../../helpers/port';
 
 function Companions({ companions }) {
     const [name, setName] = useState();
 
     async function click() {
-        const res = await fetch('http://localhost:9045/subjects/', {
+        const res = await fetch(`http://localhost:${port}/subjects/`, {
             method: 'POST',
             body: {
                 name
@@ -46,7 +47,7 @@ function Companions({ companions }) {
 }
 
 export async function getServerSideProps() {
-    const res = await fetch('http://localhost:9045/companions', {
+    const res = await fetch(`http://localhost:${port}/companions`, {
         method: 'GET'
     })
 

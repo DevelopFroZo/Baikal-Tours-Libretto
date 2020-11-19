@@ -5,6 +5,7 @@ import styles from './style.module.scss';
 import moment from 'moment';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/router';
+import port from '../../helpers/port';
 
 const Event = ({event}) => {
 
@@ -47,7 +48,7 @@ const Event = ({event}) => {
 export async function getServerSideProps({query}){
 
     const eventId = query.id;
-    const eventResponse = await fetch(`http://localhost:9064/events/${eventId}`);
+    const eventResponse = await fetch(`http://localhost:${port}/events/${eventId}`);
     const {payload: event} = await eventResponse.json();
 
     return {

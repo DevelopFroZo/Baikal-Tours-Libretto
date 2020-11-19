@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.scss';
 import { Card } from 'primereact/card';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
+import port from '../helpers/port';
 
 export default function Home({events}) {
 
@@ -13,7 +14,7 @@ export default function Home({events}) {
 
   return (
     <Container>
-      <Header url='/events'/>
+      <Header url='/'/>
 
       <ul className={`m-mt-5 ${styles.eventsList}`}>
         {events.map((el, i) => 
@@ -44,7 +45,7 @@ export default function Home({events}) {
 
 export async function getServerSideProps(context){
 
-  const eventsResponse = await fetch('http://localhost:9064/events');
+  const eventsResponse = await fetch(`http://localhost:${port}/events`);
   const {payload: events} = await eventsResponse.json();
 
   return {

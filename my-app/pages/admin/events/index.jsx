@@ -4,6 +4,7 @@ import Container from '../../../components/Container';
 import Header from '../../../components/header';
 import styles from './style.module.scss';
 import moment from 'moment';
+import port from '../../../helpers/port';
 
 function Events({ events }) {
     return (
@@ -27,7 +28,7 @@ function Events({ events }) {
 }
 
 export async function getServerSideProps() {
-    const res = await fetch('http://localhost:9045/events', {
+    const res = await fetch(`http://localhost:${port}/events`, {
         method: 'GET'
     });
 

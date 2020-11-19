@@ -4,13 +4,14 @@ import { Button } from 'primereact/button';
 import { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import Header from '../../../components/header'
+import Header from '../../../components/header';
+import port from '../../../helpers/port';
 
 function Subjects({ subjects }) {
     const [name, setName] = useState();
 
     async function click() {
-        const res = await fetch('http://localhost:9045/subjects/', {
+        const res = await fetch(`http://localhost:${port}/subjects/`, {
             method : 'POST',
             body : {
                 name
@@ -46,7 +47,7 @@ function Subjects({ subjects }) {
 }
 
 export async function getServerSideProps() {
-    const res = await fetch("http://localhost:9045/subjects", {
+    const res = await fetch(`http://localhost:${port}/subjects`, {
         method: "GET"
     })
 
