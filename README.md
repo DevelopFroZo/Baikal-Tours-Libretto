@@ -1,5 +1,6 @@
 # 1. _С кем пойти_
 `POST /companions` -- создать с кем пойти
+
 `body`:
 - `(string) name` -- название
 
@@ -8,6 +9,7 @@
 `GET /companions` -- получить список всех с кем пойти
 
 `PUT /companions/:id` -- обновить _с кем пойти_ по `ID`
+
 `query`:
 - `(number) :id` -- `ID` _с кем пойти_
 
@@ -18,6 +20,7 @@
 
 # 3. События
 `POST /events` -- создать событие
+
 `body`:
 - `(string) name` -- название
 - `(string) description` -- описание
@@ -36,6 +39,7 @@ payload type: [ event, ... ] // из GET /events/:id
 ```
 
 `GET /events/:id` -- получить событие по `ID`
+
 `query`:
 - `(number) :id` -- `ID` события
 
@@ -65,6 +69,7 @@ payload type: {
 ```
 
 `PUT /events/:id` -- обновить событие по `ID`
+
 `query`:
 - `(number) :id` -- `ID` события
 
@@ -72,6 +77,7 @@ payload type: {
 
 # 4. Цепочка событий
 `POST /chainedEvents` -- создать цепочку событий
+
 `body`:
 - `(number[]) events` -- массив `ID` событий (`events`)
 
@@ -90,6 +96,7 @@ payload type: [
 ```
 
 `PUT /chainedEvents/:id` -- обновить цепочку событий по `ID`
+
 `query`:
 - `(number) :id` -- `ID` цепочки событий
 
