@@ -46,5 +46,5 @@ def index_( method: String!, event: String! ) = {
 
 def current( method: String!, event: String!, id: Int! ) = {
   if( method == 'GET ) getOne( id )
-  if( method == 'PUT ) updateOne( id, event.json/parseObject )
+  else if( method == 'PUT ) updateOne( id, event.json/parseObject )
 }

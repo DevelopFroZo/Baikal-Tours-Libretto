@@ -29,8 +29,8 @@ def update( id: Int!, chainedEvent: v2/Object! ) = data/w: {
   }"
 }
 
-def index_( method: String!, event: String! ) = {
-  if( method == 'POST ) createOne( event.json/parseObject )
+def index_( method: String!, chainedEvent: String! ) = {
+  if( method == 'POST ) createOne( chainedEvent.json/parseObject )
   else if( method == 'GET ) getAll
 }
 

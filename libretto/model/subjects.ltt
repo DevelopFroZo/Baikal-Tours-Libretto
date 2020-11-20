@@ -15,3 +15,5 @@ def saveSubject( subject: v2/Object! ) = {
 
 def getSubjects = subjects.keys as key.( subjects.map( key ) )
 def getSubjects( idsAny: Any? ) = ( idsAny dyn #v2/Array ).contents as id.( subjects.map( id ) )
+
+def updateSubject( id: Int!, subject: v2/Object! ) = subjects.map( id ).set( 'name, subject.get( 'name ) )

@@ -21,7 +21,19 @@ def getAll = data/w: jetx/out: {
   }"
 }
 
-def index_( method: String!, event: String! ) = {
-  if( method == 'POST ) createOne( event.json/parseObject )
+def updateOne( id: Int!, subject: v2/Object! ) = data/w: {
+  model/updateSubject( id, subject )
+
+  jetx/out: json"{
+    "payload": null
+  }"
+}
+
+def index_( method: String!, subject: String! ) = {
+  if( method == 'POST ) createOne( subject.json/parseObject )
   else if( method == 'GET ) getAll
+}
+
+def current( method: String!, subject: String!, id: Int! ) = {
+  if( method == 'PUT ) updateOne( id, subject.json/parseObject )
 }
