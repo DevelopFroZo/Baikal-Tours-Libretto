@@ -5,15 +5,28 @@ package control
 	use com/teacode/jetx/params
 	use com/teacode/jetx/response
 	use libretto/web/in
+	use libretto/web/out
 
 	use routes/events
 	use routes/companions
 	use routes/subjects
 	use routes/chainedEvents
 
+def cors = {
+	out/headers!"Access-Control-Allow-Origin" = "*"
+
+	if( in/method == 'OPTIONS ){
+    out/headers!"Access-Control-Allow-Methods" = "*"
+    out/headers!"Access-Control-Allow-Headers" = "*"
+    // out/headers!"Access-Control-Max-Age" = "86400"
+    jetx/out( 203, "" )
+	}
+}
+
 def process = jetx/process: {
 	out: response/out
 	step: params/read
+	step: cors
 	
 	step: router/resolve: {
 		route( "/events" ): events/index_( in/method, in/bodyText )
