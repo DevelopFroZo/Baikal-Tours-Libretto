@@ -12,6 +12,7 @@
     "moment": "^2.29.1",
     "next": "10.0.2",
     "node-sass": "^5.0.0",
+    "nprogress": "^0.2.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primereact": "^5.0.1",

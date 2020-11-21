@@ -9,14 +9,26 @@ import port from '../../../helpers/port';
 
 function Subjects({ subjects }) {
     const [name, setName] = useState();
+    const [subs, setSubs] = useState(subjects);
 
     async function click() {
         const res = await fetch(`http://localhost:${port}/subjects/`, {
             method: 'POST',
-            body: {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 name
-            }
+            })
         })
+
+        const subRes = await fetch(`http://localhost:${port}/subjects`, {
+            method: "GET"
+        })
+
+        const jsn = await subRes.json();
+
+        setSubs(jsn.payload);
     }
 
     return (
@@ -36,7 +48,7 @@ function Subjects({ subjects }) {
                 />
             </div>
             <div className='p-mt-5'>
-                <DataTable value={subjects}>
+                <DataTable value={subs}>
                     <Column field='id' header='ID' sortable></Column>
                     <Column field='name' header='Name' sortable></Column>
                 </DataTable>

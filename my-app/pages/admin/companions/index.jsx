@@ -9,14 +9,26 @@ import port from '../../../helpers/port';
 
 function Companions({ companions }) {
     const [name, setName] = useState();
+    const [comps, setComps] = useState(companions);
 
     async function click() {
-        const res = await fetch(`http://localhost:${port}/subjects/`, {
+        const res = await fetch(`http://localhost:${port}/companions/`, {
             method: 'POST',
-            body: {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 name
-            }
-        })
+            })
+        });
+
+        const compRes = await fetch(`http://localhost:${port}/companions/`, {
+            method: 'GET',
+        });
+
+        const jsn = await compRes.json();
+
+        setComps(jsn.payload);
     }
 
     return (
@@ -36,7 +48,7 @@ function Companions({ companions }) {
                 />
             </div>
             <div className='p-mt-5'>
-                <DataTable value={companions}>
+                <DataTable value={comps}>
                     <Column field='id' header='ID' sortable></Column>
                     <Column field='name' header='Name' sortable></Column>
                 </DataTable>
