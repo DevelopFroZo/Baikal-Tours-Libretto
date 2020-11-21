@@ -22,3 +22,15 @@ def saveEvent( event: v2/Object! ) = {
 def getEvent( id: Int! ) = events.map( id )
 def getEvents = events.keys as key.( events.map( key ) )
 def getEvents( idsAny: Any? ) = ( idsAny dyn #v2/Array ).contents as id.( events.map( id ) )
+
+def updateEvent( id: Int!, event: v2/Object! ) = {
+  fix event_ = events.map( id )
+
+  event_.set( 'name, event.get( 'name ) )
+  event_.set( 'description, event.get( 'description ) )
+  event_.set( 'date_start, event.get( 'date_start ) )
+  event_.set( 'date_end, event.get( 'date_end ) )
+  event_.set( 'companions, event.get( 'companions ) )
+  event_.set( 'location, event.get( 'location ) )
+  event_.set( 'subjects, event.get( 'subjects ) )
+}

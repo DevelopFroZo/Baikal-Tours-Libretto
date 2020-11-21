@@ -30,11 +30,13 @@ def process = jetx/process: {
 	
 	step: router/resolve: {
 		route( "/events" ): events/index_( in/method, in/bodyText )
-		route( "/events/:id" ): events/current( in/method, params.inte( 'id ) dyn #Int! )
+		route( "/events/:id" ): events/current( in/method, in/bodyText, params.inte( 'id ) dyn #Int! )
 
 		route( "/companions" ): companions/index_( in/method, in/bodyText )
+		route( "/companions/:id" ): companions/current( in/method, in/bodyText, params.inte( 'id ) dyn #Int! )
 
 		route( "/subjects" ): subjects/index_( in/method, in/bodyText )
+		route( "/subjects/:id" ): subjects/current( in/method, in/bodyText, params.inte( 'id ) dyn #Int! )
 
 		route( "/chainedEvents" ): chainedEvents/index_( in/method, in/bodyText )
 		route( "/chainedEvents/:id" ): chainedEvents/current( in/method, in/bodyText, params.inte( 'id ) dyn #Int! )

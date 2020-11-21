@@ -31,11 +31,20 @@ def getOne( id: Int! ) = data/w: {
   jetx/out: payload
 }
 
+def updateOne( id: Int!, event: v2/Object! ) = data/w: {
+  model/updateEvent( id, event )
+
+  jetx/out: json"{
+    "payload": null
+  }"
+}
+
 def index_( method: String!, event: String! ) = {
   if( method == 'POST ) createOne( event.json/parseObject )
   else if( method == 'GET ) getAll
 }
 
-def current( method: String!, id: Int! ) = {
+def current( method: String!, event: String!, id: Int! ) = {
   if( method == 'GET ) getOne( id )
+  else if( method == 'PUT ) updateOne( id, event.json/parseObject )
 }
