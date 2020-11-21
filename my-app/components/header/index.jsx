@@ -9,7 +9,7 @@ const Header = ({isAdmin = false, url = '/'}) => {
     const router = useRouter();
 
     const items = [
-        { label: 'События', url: '/events' },
+        { label: 'События', url: '/' },
         { label: 'Панель администратора', url: '/admin' }
     ]
 
