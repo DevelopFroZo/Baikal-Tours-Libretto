@@ -1,4 +1,5 @@
 package routes/companions
+  use libretto/web/in
   use com/teacode/jetx
   use com/teacode/json
   use com/teacode/json/v2
@@ -21,6 +22,22 @@ def getAll = data/w: jetx/out: {
   }"
 }
 
+def home = {
+  in/method.{
+    case 'POST => createOne( in/bodyText.json/parseObject )
+    case 'GET => getAll
+  }
+}
+
+package routes/companions/current
+  use libretto/web/in
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use model
+
 def updateOne( id: Int!, companion: v2/Object! ) = data/w: {
   model/updateCompanion( id, companion )
 
@@ -29,11 +46,8 @@ def updateOne( id: Int!, companion: v2/Object! ) = data/w: {
   }"
 }
 
-def index_( method: String!, companion: String! ) = {
-  if( method == 'POST ) createOne( companion.json/parseObject )
-  else if( method == 'GET ) getAll
-}
-
-def current( method: String!, companion: String!, id: Int! ) = {
-  if( method == 'PUT ) updateOne( id, companion.json/parseObject )
+def home = {
+  in/method.{
+    case 'PUT => updateOne( jetx/params.inte( 'id ), in/bodyText.json/parseObject )
+  }
 }

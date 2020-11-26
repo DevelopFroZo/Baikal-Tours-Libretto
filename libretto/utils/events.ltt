@@ -13,7 +13,8 @@ def eventToJson( event: data/Map? ) = {
     "date_end": #{event.int( 'date_end )},
     "companions": [#{event.value( 'companions ).*model/getCompanions.*companionsToJson}],
     "location": #{event.string( 'location )},
-    "subjects": [#{event.value( 'subjects ).*model/getSubjects.*subjectsToJson}]
+    "subjects": [#{event.value( 'subjects ).*model/getSubjects.*subjectsToJson}],
+    "image_path": #{event.string( 'image_path )}
   }"
 }
 

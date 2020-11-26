@@ -1,4 +1,5 @@
 package routes/subjects
+  use libretto/web/in
   use com/teacode/jetx
   use com/teacode/json
   use com/teacode/json/v2
@@ -21,6 +22,22 @@ def getAll = data/w: jetx/out: {
   }"
 }
 
+def home = {
+  in/method.{
+    case 'POST => createOne( in/bodyText.json/parseObject )
+    case 'GET => getAll
+  }
+}
+
+package routes/subjects/current
+  use libretto/web/in
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use model
+
 def updateOne( id: Int!, subject: v2/Object! ) = data/w: {
   model/updateSubject( id, subject )
 
@@ -29,11 +46,8 @@ def updateOne( id: Int!, subject: v2/Object! ) = data/w: {
   }"
 }
 
-def index_( method: String!, subject: String! ) = {
-  if( method == 'POST ) createOne( subject.json/parseObject )
-  else if( method == 'GET ) getAll
-}
-
-def current( method: String!, subject: String!, id: Int! ) = {
-  if( method == 'PUT ) updateOne( id, subject.json/parseObject )
+def home = {
+  in/method.{
+    case 'PUT => updateOne( jetx/params.inte( 'id ), in/bodyText.json/parseObject )
+  }
 }

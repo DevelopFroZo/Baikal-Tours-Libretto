@@ -15,6 +15,7 @@ def saveEvent( event: v2/Object! ) = {
   event_.set( 'companions, event.get( 'companions ) )
   event_.set( 'location, event.get( 'location ) )
   event_.set( 'subjects, event.get( 'subjects ) )
+  event_.set( 'image_path, "" )
   saveCounter( id )
   id
 }
@@ -34,3 +35,6 @@ def updateEvent( id: Int!, event: v2/Object! ) = {
   event_.set( 'location, event.get( 'location ) )
   event_.set( 'subjects, event.get( 'subjects ) )
 }
+
+def checkEvent( id: Int! ) = events.map( id )
+def attachImageToEvent( id: Int!, imagePath: String? ) = events.map( id ).set( 'image_path, imagePath )

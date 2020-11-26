@@ -1,4 +1,5 @@
 package routes/events
+  use libretto/web/in
   use com/teacode/jetx
   use com/teacode/json
   use com/teacode/json/v2
@@ -18,6 +19,25 @@ def createOne( event: v2/Object! ) = data/w: {
 def getAll = data/w: jetx/out: json"{
   "payload": [#{model/getEvents.*utils/eventsToJson}]
 }"
+
+def home = {
+  in/method.{
+    case 'POST => createOne( in/bodyText.json/parseObject )
+    case 'GET => getAll
+  }
+}
+
+package routes/events/current
+  use libretto/io
+  use libretto/web/in
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use config
+  use model
+  use utils
 
 def getOne( id: Int! ) = data/w: {
   fix event = model/getEvent( id )
@@ -39,12 +59,51 @@ def updateOne( id: Int!, event: v2/Object! ) = data/w: {
   }"
 }
 
-def index_( method: String!, event: String! ) = {
-  if( method == 'POST ) createOne( event.json/parseObject )
-  else if( method == 'GET ) getAll
+def home = {
+  fix id = jetx/params.inte( 'id )
+
+  in/method.{
+    case 'GET => getOne( id )
+    case 'PUT => updateOne( id, in/bodyText.json/parseObject )
+  }
 }
 
-def current( method: String!, event: String!, id: Int! ) = {
-  if( method == 'GET ) getOne( id )
-  else if( method == 'PUT ) updateOne( id, event.json/parseObject )
+def image: Any* = data/w: {
+  if( not in/method == 'POST ) return ()
+
+  fix id = jetx/params.inte( 'id )
+  fix check = model/checkEvent( id )
+
+  if( not check ){
+    jetx/out: json"{
+      "error": {
+        "message": "Invalid event ID",
+        "meta": "id"
+      }
+    }"
+
+    return ()
+  }
+
+  fix folderToSave = io/p: config/UPLOAD_DIRECTORY
+  fix fields: in/Field* = in/upload: folderToSave
+  fix imagePath = fields as field.where( field.name == 'image ).[0].value
+
+  if( not imagePath ){
+    jetx/out: json"{
+      "error": {
+        "message": "Send file in \"image\" field",
+        "meta": "image"
+      }
+    }"
+
+    return ()
+  }
+
+  println: imagePath
+  model/attachImageToEvent( id, imagePath )
+
+  jetx/out: json"{
+    "payload": #{imagePath}
+  }"
 }
