@@ -1,4 +1,4 @@
 package config
 
-def PROJECT_ROOT = "E:/Projects/Libretto/Baikal Events"
+def PROJECT_ROOT = "D:/проектный практикум/проект/Baikal-Tours-Libretto"
 def UPLOAD_DIRECTORY = s"#{PROJECT_ROOT}/public/upload"
