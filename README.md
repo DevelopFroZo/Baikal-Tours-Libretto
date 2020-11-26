@@ -74,6 +74,16 @@ payload type: {
 
 `body`: аналогично созданию
 
+`POST /events/:id/image` - создать картинку для события
+
+`query`:
+- `(number) :id` - `ID` события
+
+`(multipart) body`:
+- `(file) image` - картинка
+
+`payload type: string` - сгенерированное имя для картинки
+
 # 4. Цепочка событий
 `POST /chained-events` - создать цепочку событий
 
