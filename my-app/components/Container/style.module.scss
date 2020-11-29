@@ -1,5 +1,7 @@
+@import '../../styles/params.scss';
+
 .container{
-    width: 1200px;
+    width: $container;
     padding: 30px;
     margin: auto;
 }

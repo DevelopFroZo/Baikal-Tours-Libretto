@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../styles/globals.scss'
 import 'primeflex/primeflex.css';
 import Router from 'next/router';
 import NProgress from 'nprogress'; //nprogress module
