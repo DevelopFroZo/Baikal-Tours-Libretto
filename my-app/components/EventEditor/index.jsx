@@ -2,6 +2,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Calendar } from 'primereact/calendar';
 import { MultiSelect } from 'primereact/multiselect';
+import { FileUpload } from 'primereact/fileupload';
 import styles from './style.module.scss';
 
 const EventEditor = (props) => {
@@ -35,7 +36,7 @@ const EventEditor = (props) => {
                 <span className="p-float-label">
                     <MultiSelect id="companions" value={props.companions} onChange={(e) => {
                         props.ChangeCompanions(e.value)
-                        }} options={props._companions} optionLabel="name" className={styles.multi} />
+                    }} options={props._companions} optionLabel="name" className={styles.multi} />
                     <label htmlFor="companions">Companions</label>
                 </span>
             </div>
@@ -53,6 +54,17 @@ const EventEditor = (props) => {
                     <label htmlFor="subjects">Subjects</label>
                 </span>
             </div>
+            {
+                props.onUpload !== undefined ?
+                    <div>
+                        <div className="card">
+                            <h5>Upload images</h5>
+                            <FileUpload name="image" customUpload uploadHandler={props.onUpload} maxFileSize={10000000}
+                                emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
+                        </div>
+                    </div>
+                    : <></>
+            }
         </>
     )
 }

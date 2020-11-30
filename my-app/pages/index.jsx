@@ -1,39 +1,19 @@
 import Container from '../components/Container'
 import Header from '../components/header';
 import styles from '../styles/Home.module.scss';
-import { Card } from 'primereact/card';
-import { useRouter } from 'next/router';
-import { Button } from 'primereact/button';
+import EventCard from '../components/EventCard';
 import port from '../helpers/port';
 
 export default function Home({events}) {
-
-  console.log(events)
-
-  const router = useRouter();
 
   return (
     <Container>
       <Header url='/'/>
 
-      <ul className={`m-mt-5 ${styles.eventsList}`}>
+      <ul className='m-mt-5 eventsList'>
         {events.map((el, i) => 
           <li className={styles.eventsItem} key={i}>
-            <Card 
-              title={el.name}
-              footer={(
-                <span>
-                  <Button 
-                    label='Смотреть'
-                    onClick={() => router.push(`/event?id=${el.id}`)}
-                  />
-                </span>
-              )}
-            >
-              <p>
-                {el.description}
-              </p>
-            </Card>
+            <EventCard event={el} />
           </li>
         )}
         

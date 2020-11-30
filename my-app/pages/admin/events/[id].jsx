@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/router'
+import styles from './style.module.scss';
 
 function Event({ event, companions, subjects }) {
     const [name, setName] = useState(event.name);
@@ -18,11 +19,11 @@ function Event({ event, companions, subjects }) {
 
     const router = useRouter()
 
-    function cancel(){
+    function cancel() {
         router.push(`/admin/events`);
     }
-    
-    async function save(){
+
+    async function save() {
         const body = {
             name,
             description,
@@ -44,11 +45,34 @@ function Event({ event, companions, subjects }) {
         router.push(`/admin/events`);
     }
 
+    console.log(event)
+
+    async function onUpload(e) {
+        console.log(e.files);
+
+        const formData = new FormData();
+
+        formData.append('image', e.files[0]);
+
+        const imageResponse = await fetch(`http://localhost:${port}/events/${event.id}/image`,
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
+
+        const jsn = await imageResponse.json()
+
+        console.log(jsn)
+
+    }
+
+
     return (
         <Container>
             <Header isAdmin={true} url='/admin/events' />
             <h1>Event {event.id} ({name}):</h1>
-
+            <img src={`http://localhost:${port}/upload/${event.image_path}`} className={styles.img}/>
             <EventEditor
                 name={name} ChangeName={setName}
                 description={description} ChangeDescription={setDescription}
@@ -59,8 +83,8 @@ function Event({ event, companions, subjects }) {
                 subjects={sbjcts} ChangeSubjects={setSbjcts} _subjects={subjects}
             />
             <div className='p-mt-3'>
-                <Button icon='pi pi-angle-left' label='Cancel' className='p-button-text p-button-secondary' onClick={cancel}/>
-                <Button icon='pi pi-check' label='Save changes' className='p-ml-3' onClick={save}/>
+                <Button icon='pi pi-angle-left' label='Cancel' className='p-button-text p-button-secondary' onClick={cancel} />
+                <Button icon='pi pi-check' label='Save changes' className='p-ml-3' onClick={save} />
             </div>
         </Container>
     )

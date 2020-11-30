@@ -20,6 +20,7 @@ function Events({ eventsResponse, companions, subjects }) {
     const [sbjcts, setSbjcts] = useState([]);
     const [addEvent, setAddEvent] = useState(false);
     const [events, setEvents] = useState(eventsResponse);
+    const [file, setFile] = useState();
 
     const router = useRouter()
 
@@ -42,6 +43,23 @@ function Events({ eventsResponse, companions, subjects }) {
             body: JSON.stringify(body)
         });
 
+        const { payload : id } = await res.json();
+
+        const formData = new FormData();
+
+        formData.append('image', file);
+
+        const imageResponse = await fetch(`http://localhost:${port}/events/${id}/image`,
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
+
+        const jsn = await imageResponse.json()
+
+        console.log( jsn )
+
         const eventsRes = await fetch(`http://localhost:${port}/events`, {
             method: 'GET'
         });
@@ -62,8 +80,11 @@ function Events({ eventsResponse, companions, subjects }) {
         setEvents(evnts);
     }
 
+    function onUpload(e) {
+        setFile(e.files[0]);
+    }
+
     function onRowEditInit(e) {
-        // href={`/objects/${props.id}`}
         router.push(`/admin/events/${e.data.id}`);
     }
 
@@ -82,6 +103,7 @@ function Events({ eventsResponse, companions, subjects }) {
                     companions={cmpns} ChangeCompanions={setCmpns} _companions={companions}
                     location={location} ChangeLocation={setLocaton}
                     subjects={sbjcts} ChangeSubjects={setSbjcts} _subjects={subjects}
+                    onUpload={onUpload}
                 />
                 <Button icon='pi pi-plus' label='Create new event' className='p-mt-3 p-d-block' onClick={click} />
             </div>
