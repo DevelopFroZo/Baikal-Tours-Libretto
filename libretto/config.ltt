@@ -1,4 +1,0 @@
-package config
-
-def PROJECT_ROOT = "C:/Учеба/personalTestingLibretto/Baikal-Tours-Libretto"
-def UPLOAD_DIRECTORY = s"#{PROJECT_ROOT}/public/upload"

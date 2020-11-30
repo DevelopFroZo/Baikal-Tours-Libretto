@@ -85,9 +85,9 @@ def image: Any* = data/w: {
     return ()
   }
 
-  fix folderToSave = io/p: config/UPLOAD_DIRECTORY
+  fix folderToSave = io/p: s"#{config/PROJECT_ROOT}/#{config/PUBLIC_URI}/#{config/UPLOAD_URI}"
   fix fields: in/Field* = in/upload: folderToSave
-  fix imagePath = fields as field.where( field.name == 'image ).[0].value
+  var imagePath = fields as field.where( field.name == 'image ).[0].value
 
   if( not imagePath ){
     jetx/out: json"{
@@ -100,7 +100,7 @@ def image: Any* = data/w: {
     return ()
   }
 
-  println: imagePath
+  imagePath = s"#{config/UPLOAD_URI}/#{imagePath}"
   model/attachImageToEvent( id, imagePath )
 
   jetx/out: json"{
