@@ -1,4 +1,0 @@
-package config
-
-def PROJECT_ROOT = "E:/Projects/Libretto/Baikal Events"
-def UPLOAD_DIRECTORY = s"#{PROJECT_ROOT}/public/upload"
