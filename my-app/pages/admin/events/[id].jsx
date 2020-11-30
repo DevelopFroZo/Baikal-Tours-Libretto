@@ -72,7 +72,7 @@ function Event({ event, companions, subjects }) {
         <Container>
             <Header isAdmin={true} url='/admin/events' />
             <h1>Event {event.id} ({name}):</h1>
-            <img src={`http://localhost:${port}/upload/${event.image_path}`} className={styles.img}/>
+            <img src={`http://localhost:${port}/${event.image_path}`} className={styles.img}/>
             <EventEditor
                 name={name} ChangeName={setName}
                 description={description} ChangeDescription={setDescription}
