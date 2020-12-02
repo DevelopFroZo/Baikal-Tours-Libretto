@@ -1,5 +1,0 @@
-package config
-
-def PROJECT_ROOT = "D:/проектный практикум/проект/Baikal-Tours-Libretto"
-def PUBLIC_URI = "public"
-def UPLOAD_URI = "upload"
