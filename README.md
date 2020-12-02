@@ -1,3 +1,13 @@
+# Config example
+```
+package config
+
+def PROJECT_ROOT = ""
+def PUBLIC_URI = "public"
+def UPLOAD_URI = "upload"
+def ROOT_SECRET = ""
+```
+
 # 1. _С кем пойти_ (`companions`)
 `POST /companions` - создать с кем пойти
 `Access level`: `admin`
