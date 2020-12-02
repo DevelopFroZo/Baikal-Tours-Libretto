@@ -10,6 +10,7 @@ def ROOT_SECRET = ""
 
 # 1. _С кем пойти_ (`companions`)
 `POST /companions` - создать с кем пойти
+
 `Access level`: `admin`
 
 `body`:
@@ -20,6 +21,7 @@ def ROOT_SECRET = ""
 `GET /companions` - получить список всех с кем пойти
 
 `PUT /companions/:id` - обновить _с кем пойти_ по `ID`
+
 `Access level`: `admin`
 
 `query`:
@@ -32,6 +34,7 @@ def ROOT_SECRET = ""
 
 # 3. События (`events`)
 `POST /events` - создать событие
+
 `Access level`: `admin`
 
 `body`:
@@ -81,6 +84,7 @@ payload type: {
 ```
 
 `PUT /events/:id` - обновить событие по `ID`
+
 `Access level`: `admin`
 
 `query`:
@@ -100,6 +104,7 @@ payload type: {
 
 # 4. Цепочка событий (`chained-events`)
 `POST /chained-events` - создать цепочку событий
+
 `Access level`: `user`
 
 `body`:
@@ -108,6 +113,7 @@ payload type: {
 `payload type: number` - `ID` новой цепочки событий
 
 `GET /chained-events` - получить все цепочки событий
+
 `Access level`: `user`
 
 ```
@@ -121,6 +127,7 @@ payload type: [
 ```
 
 `PUT /chained-events/:id` - обновить цепочку событий по `ID`
+
 `Access level`: `user`
 
 `query`:
@@ -139,6 +146,7 @@ payload type: [
 `payload type: number` - `ID` нового пользователя
 
 `POST /auth/signIn` - войти под пользователем
+
 `body`:
 - `(string) login` - логин
 - `(string) password` - пароль
