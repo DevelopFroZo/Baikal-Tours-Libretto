@@ -1,5 +1,6 @@
-# 1. _С кем пойти_
+# 1. _С кем пойти_ (`companions`)
 `POST /companions` - создать с кем пойти
+`Access level`: `admin`
 
 `body`:
 - `(string) name` - название
@@ -9,6 +10,7 @@
 `GET /companions` - получить список всех с кем пойти
 
 `PUT /companions/:id` - обновить _с кем пойти_ по `ID`
+`Access level`: `admin`
 
 `query`:
 - `(number) :id` - `ID` _с кем пойти_
@@ -16,10 +18,11 @@
 `body`:
 - `(string) name` - название
 
-# 2. Тематики. Аналогично _с кем пойти_, но роут `/subjects`
+# 2. Тематики (`subjects`). Аналогично _с кем пойти_, но роут `/subjects`
 
-# 3. События
+# 3. События (`events`)
 `POST /events` - создать событие
+`Access level`: `admin`
 
 `body`:
 - `(string) name` - название
@@ -68,6 +71,7 @@ payload type: {
 ```
 
 `PUT /events/:id` - обновить событие по `ID`
+`Access level`: `admin`
 
 `query`:
 - `(number) :id` - `ID` события
@@ -84,8 +88,9 @@ payload type: {
 
 `payload type: string` - сгенерированное имя для картинки
 
-# 4. Цепочка событий
+# 4. Цепочка событий (`chained-events`)
 `POST /chained-events` - создать цепочку событий
+`Access level`: `user`
 
 `body`:
 - `(number[]) events` - массив `ID` событий (`events`)
@@ -93,6 +98,7 @@ payload type: {
 `payload type: number` - `ID` новой цепочки событий
 
 `GET /chained-events` - получить все цепочки событий
+`Access level`: `user`
 
 ```
 payload type: [
@@ -105,9 +111,44 @@ payload type: [
 ```
 
 `PUT /chained-events/:id` - обновить цепочку событий по `ID`
+`Access level`: `user`
 
 `query`:
 - `(number) :id` - `ID` цепочки событий
 
 `body`:
 - `(number[]) events` - массив `ID` событий (`events`)
+
+# 4. Авторизация (`auth`)
+`POST /auth/signUp` - зарегистрировать пользователя
+
+`body`:
+- `(string) login` - логин
+- `(string) password` - пароль
+
+`payload type: number` - `ID` нового пользователя
+
+`POST /auth/signIn` - войти под пользователем
+`body`:
+- `(string) login` - логин
+- `(string) password` - пароль
+
+`GET /auth/signOut` - выйти
+
+# 5. Пользователи (`users`)
+`GET /users/current` - получить информацию о текущем пользователе
+
+```
+payload type: {
+  id: number,
+  login: string,
+  role: "user" | "admin"
+}
+```
+
+`POST /users/createRoot` - создаёт админа с логином `root` и паролем `root`
+
+`body`:
+- `(string) secret` - секрет, который должен совпасть с секретом из файла `libretto/config.ltt`
+
+`payload type: number` - `ID` нового пользователя
