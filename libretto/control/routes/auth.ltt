@@ -1,0 +1,76 @@
+package routes/auth
+  use libretto/web/in
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use utils/password
+  use utils/auth
+  use model
+
+def signUp: Any* = {
+  in/method.{
+    case 'POST => data/w: {
+      fix user = in/bodyText.json/parseObject
+      fix login = user.get( 'login ) dyn #String!
+      fix password = user.get( 'password ) dyn #String!
+      fix hashnsalt = password/password( password )
+      fix result = model/saveUser( user, hashnsalt.hash, hashnsalt.salt )
+
+      if( result.[0] == 'bad ){
+        jetx/out: json"{
+          "error": {
+            "message": "Login already exists",
+            "meta": "login"
+          }
+        }"
+
+        return ()
+      }
+
+      auth/signIn( login, password )
+
+      jetx/out: json"{
+        "payload": #{result.[1] dyn #Int!}
+      }"
+    }
+  }
+}
+
+def signIn: Any* = {
+  in/method.{
+    case 'POST => data/w: {
+      fix user = in/bodyText.json/parseObject
+      fix login = user.get( 'login ) dyn #String!
+      fix password = user.get( 'password ) dyn #String!
+      fix result = auth/signIn( login, password )
+
+      if( result.[0] == 'bad ){
+        jetx/out: json"{
+          "error": {
+            "message": "Invalid login or password"
+          }
+        }"
+
+        return ()
+      }
+
+      jetx/out: json"{
+        "payload": null
+      }"
+    }
+  }
+}
+
+def signOut = {
+  in/method.{
+    case 'GET => {
+      auth/signOut
+
+      jetx/out: json"{
+        "payload": null
+      }"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+package routes/users
+  use libretto/web/in
+  use com/teacode/jetx
+  use com/teacode/json
+  use com/teacode/json/v2
+  use com/teacode/data
+
+  use config
+  use utils/auth
+  use utils/password
+  use model
+
+def current: Any* = data/w: {
+  in/method.{
+    case 'GET => {
+      fix login = auth/currentUser.login
+
+      if( not login ){
+        jetx/out: json"{
+          "error": {
+            "message": "Unauthorized"
+          }
+        }"
+
+        return ()
+      }
+
+      fix user = model/findUserByLogin( login dyn #String! )
+
+      jetx/out: json"{
+        "payload": {
+          "id": #{user.int( 'id ) dyn #Int!},
+          "login": #{login},
+          "role": #{user.string( 'role ) dyn #String!}
+        }
+      }"
+    }
+  }
+}
+
+def createRoot: Any* = {
+  in/method.{
+    case 'POST => data/w: {
+      fix obj = in/bodyText.json/parseObject
+      fix secret = obj.get( 'secret )
+
+      if( secret == config/ROOT_SECRET ){
+        fix hashnsalt = password/password( 'root )
+        fix id = model/createRoot( hashnsalt.hash, hashnsalt.salt )
+
+        jetx/out: json"{
+          "payload": #{id}
+        }"
+      }
+    }
+  }
+}

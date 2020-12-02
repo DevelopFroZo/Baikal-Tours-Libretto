@@ -1,0 +1,35 @@
+package model
+
+def users = root.gecr( 'users )
+
+def findUserByLogin( login: String! ) = users.keys as key.( users.map( key ) ) as user.where( user.string( 'login ) == login )
+
+def saveUser( user: v2/Object!, hash: String!, salt: String! ): Any* = {
+  fix login = user.get( 'login ) dyn #String!
+
+  if( findUserByLogin( login ) ) return 'bad
+
+  fix id = getNextCounter
+  fix user_ = users.gecr( id )
+
+  user_.set( 'id, id )
+  user_.set( 'login, login )
+  user_.set( 'hash, hash )
+  user_.set( 'salt, salt )
+  user_.set( 'role, 'user )
+  saveCounter( id )
+  ( 'good, id )
+}
+
+def createRoot( hash: String!, salt: String! ) = {
+  fix id = getNextCounter
+  fix user_ = users.gecr( id )
+
+  user_.set( 'id, id )
+  user_.set( 'login, 'root )
+  user_.set( 'hash, hash )
+  user_.set( 'salt, salt )
+  user_.set( 'role, 'admin )
+  saveCounter( id )
+  id
+}

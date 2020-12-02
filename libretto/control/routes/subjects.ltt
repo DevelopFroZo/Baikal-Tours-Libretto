@@ -7,8 +7,19 @@ package routes/subjects
 
   use model
   use utils
+  use utils/auth
 
-def createOne( subject: v2/Object! ) = data/w: {
+def createOne( subject: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   fix id = model/saveSubject( subject )
 
   jetx/out: json"{
@@ -37,8 +48,19 @@ package routes/subjects/current
   use com/teacode/data
 
   use model
+  use utils/auth
 
-def updateOne( id: Int!, subject: v2/Object! ) = data/w: {
+def updateOne( id: Int!, subject: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   model/updateSubject( id, subject )
 
   jetx/out: json"{

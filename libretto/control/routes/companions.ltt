@@ -7,8 +7,19 @@ package routes/companions
 
   use model
   use utils
+  use utils/auth
 
-def createOne( companion: v2/Object! ) = data/w: {
+def createOne( companion: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   fix id = model/saveCompanion( companion )
 
   jetx/out: json"{
@@ -37,8 +48,19 @@ package routes/companions/current
   use com/teacode/data
 
   use model
+  use utils/auth
 
-def updateOne( id: Int!, companion: v2/Object! ) = data/w: {
+def updateOne( id: Int!, companion: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   model/updateCompanion( id, companion )
 
   jetx/out: json"{

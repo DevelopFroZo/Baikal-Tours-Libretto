@@ -7,8 +7,19 @@ package routes/events
 
   use model
   use utils
+  use utils/auth
 
-def createOne( event: v2/Object! ) = data/w: {
+def createOne( event: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   fix id = model/saveEvent( event )
 
   jetx/out: json"{
@@ -38,6 +49,7 @@ package routes/events/current
   use config
   use model
   use utils
+  use utils/auth
 
 def getOne( id: Int! ) = data/w: {
   fix event = model/getEvent( id )
@@ -51,7 +63,17 @@ def getOne( id: Int! ) = data/w: {
   jetx/out: payload
 }
 
-def updateOne( id: Int!, event: v2/Object! ) = data/w: {
+def updateOne( id: Int!, event: v2/Object! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   model/updateEvent( id, event )
 
   jetx/out: json"{
@@ -69,6 +91,16 @@ def home = {
 }
 
 def image: Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
   if( not in/method == 'POST ) return ()
 
   fix id = jetx/params.inte( 'id )

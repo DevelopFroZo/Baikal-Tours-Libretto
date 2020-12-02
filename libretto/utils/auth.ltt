@@ -1,0 +1,40 @@
+package utils/auth
+  use libretto/web/in
+  use libretto/mem
+
+  use model
+  use utils/password
+
+struct User( id: Int!, login: String!, role: String! )
+struct CurrentUserKey
+
+def currentUserKey = CurrentUserKey()
+
+def findUser( login: String!, password: String! ) = {
+  if( model/findUserByLogin( login ) ) as user {
+    fix id = user.int( 'id ) dyn #Int!
+    fix login = user.string( 'login ) dyn #String!
+    fix role = user.string( 'role ) dyn #String!
+    fix salt = user.string( 'salt ) dyn #String!
+    fix hash = user.string( 'hash ) dyn #String!
+
+    if( password/Password( salt, hash ).is( password ) )
+      User( id, login, role )
+  }
+}
+
+def signIn( login: String!, password: String! ) =
+  if( findUser( login, password ) ) as user {
+    mem/w: in/session.context!currentUserKey = user
+    ( 'good, user )
+  } else {
+    'bad
+  }
+
+def signOut = {
+  mem/w: in/session.context!currentUserKey = ()
+}
+
+def currentUser = mem/w( in/session.context!currentUserKey ) dyn #User?
+
+def isAdmin = currentUser.role == 'admin

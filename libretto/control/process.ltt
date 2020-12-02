@@ -7,8 +7,6 @@ package control
 	use libretto/web/in
 	use libretto/web/out
 
-	use routes/chainedEvents
-
 def cors = {
 	out/headers!"Access-Control-Allow-Origin" = "*"
 
@@ -37,6 +35,10 @@ def process = jetx/process: {
 
 		route( "/chained-events/~" ): packages( "routes/chainedEvents" )
 		route( "/chained-events/:id/~" ): packages( "routes/chainedEvents/current" )
+
+		route( "/auth/~" ): packages( "routes/auth" )
+
+		route( "/users/~" ): packages( "routes/users" )
 
 		route( "~" ):   packages( 'url )
 		q/route( "~" ): packages( 'ajax )
