@@ -7,7 +7,7 @@ import EventEditor from '../../../components/EventEditor';
 import styles from './style.module.scss';
 import moment from 'moment';
 import port from '../../../helpers/port';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 
 function Events({ eventsResponse, companions, subjects }) {
@@ -21,8 +21,24 @@ function Events({ eventsResponse, companions, subjects }) {
     const [addEvent, setAddEvent] = useState(false);
     const [events, setEvents] = useState(eventsResponse);
     const [file, setFile] = useState();
+    const [user, setUser] = useState();
 
     const router = useRouter()
+    
+    useEffect(async () => {
+        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        const user = await userResponse.json()
+
+        if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
+            router.push( '/' )
+        }
+
+        setUser(user);
+    }, [])
 
     async function click() {
         const body = {
@@ -43,7 +59,7 @@ function Events({ eventsResponse, companions, subjects }) {
             body: JSON.stringify(body)
         });
 
-        const { payload : id } = await res.json();
+        const { payload: id } = await res.json();
 
         const formData = new FormData();
 
@@ -58,7 +74,7 @@ function Events({ eventsResponse, companions, subjects }) {
 
         const jsn = await imageResponse.json()
 
-        console.log( jsn )
+        console.log(jsn)
 
         const eventsRes = await fetch(`http://localhost:${port}/events`, {
             method: 'GET'
@@ -90,7 +106,7 @@ function Events({ eventsResponse, companions, subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={true} url='/admin/events' />
+            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/events' />
             <h1>Events</h1>
             {addEvent ? <div>
                 <Button icon='pi pi-minus' label='Add new event' className='p-mt-3 p-d-block' onClick={() => setAddEvent(false)} />

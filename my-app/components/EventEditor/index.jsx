@@ -59,7 +59,7 @@ const EventEditor = (props) => {
                     <div>
                         <div className="card">
                             <h5>Upload images</h5>
-                            <FileUpload name="image" customUpload uploadHandler={props.onUpload} maxFileSize={10000000}
+                            <FileUpload name="image" auto={true} customUpload uploadHandler={props.onUpload} maxFileSize={10000000}
                                 emptyTemplate={<p className="p-m-0">Drag and drop files to here to upload.</p>} />
                         </div>
                     </div>

@@ -3,7 +3,7 @@ import Header from '../../../components/header';
 import port from '../../../helpers/port';
 import EventEditor from '../../../components/EventEditor';
 import moment from 'moment';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/router'
 import styles from './style.module.scss';
@@ -16,6 +16,22 @@ function Event({ event, companions, subjects }) {
     const [cmpns, setCmpns] = useState(event.companions);
     const [location, setLocaton] = useState(event.location);
     const [sbjcts, setSbjcts] = useState(event.subjects);
+    const [user, setUser] = useState();
+
+    useEffect(async () => {
+        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        const user = await userResponse.json()
+
+        if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
+            router.push( '/' )
+        }
+
+        setUser(user);
+    }, [])
 
     const router = useRouter()
 
@@ -70,9 +86,9 @@ function Event({ event, companions, subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={true} url='/admin/events' />
+            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/events' />
             <h1>Event {event.id} ({name}):</h1>
-            <img src={`http://localhost:${port}/${event.image_path}`} className={styles.img}/>
+            <img src={`http://localhost:${port}/${event.image_path}`} className={styles.img} />
             <EventEditor
                 name={name} ChangeName={setName}
                 description={description} ChangeDescription={setDescription}

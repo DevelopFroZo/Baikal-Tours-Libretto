@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/header';
 import styles from './style.module.scss';
@@ -12,9 +12,22 @@ const Event = ({ event }) => {
     const router = useRouter();
     moment.locale('ru')
 
+    const [user, setUser] = useState();
+
+    useEffect(async () => {
+        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        const user = await userResponse.json()
+        setUser(user);
+    }, [])
+
     return (
         <Container>
-            <Header url='/events' />
+            <Header url='/events' isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} />
+
             <Button
                 icon='pi pi-arrow-left'
                 label='Вернуться'

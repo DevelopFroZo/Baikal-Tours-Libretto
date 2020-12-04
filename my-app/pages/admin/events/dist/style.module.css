@@ -1,0 +1,35 @@
+.column {
+  vertical-align: top;
+}
+.column_id {
+  font-weight: bold;
+}
+.column_description {
+  width: 30%;
+}
+
+.description {
+  width: 40vw;
+  height: 10vh;
+}
+
+.multi {
+  width: 40vw;
+}
+
+.textEdit {
+  width: 100%;
+}
+
+.textAreaEdit {
+  width: 100%;
+}
+
+.eventEditor {
+  margin-top: 3vh;
+}
+
+.img {
+  width: 50%;
+  margin-bottom: 5%;
+}

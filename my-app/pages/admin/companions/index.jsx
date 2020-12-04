@@ -2,14 +2,33 @@ import { DataTable } from "primereact/datatable";
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Container from '../../../components/Container';
 import Header from '../../../components/header';
 import port from '../../../helpers/port';
+import { useRouter } from 'next/router';
 
 function Companions({ companions }) {
     const [name, setName] = useState();
     const [comps, setComps] = useState(companions);
+    const [user, setUser] = useState();
+
+    const router = useRouter()
+
+    useEffect(async () => {
+        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        const user = await userResponse.json()
+
+        if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
+            router.push( '/' )
+        }
+
+        setUser(user);
+    }, [])
 
     async function click() {
         const res = await fetch(`http://localhost:${port}/companions/`, {
@@ -33,7 +52,7 @@ function Companions({ companions }) {
 
     return (
         <Container>
-            <Header isAdmin={true} url='/admin/companions' />
+            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/companions' />
             <h1>Companions</h1>
             <div>
                 <span className="p-float-label p-mt-4">
