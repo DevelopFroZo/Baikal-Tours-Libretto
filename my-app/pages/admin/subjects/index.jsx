@@ -8,31 +8,22 @@ import Header from '../../../components/header';
 import port from '../../../helpers/port';
 import { useRouter } from 'next/router';
 
-function Subjects({ subjects }) {
-    const [name, setName] = useState();
+function Subjects({ user, subjects }) {
+    const [name, setName] = useState('');
     const [subs, setSubs] = useState(subjects);
-    const [user, setUser] = useState();
 
     const router = useRouter();
 
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-
-        const user = await userResponse.json()
-
+    useEffect(() => {
         if (user === undefined || 'error' in user || ('payload' in user && user.payload.role !== 'admin')) {
             router.push('/')
         }
-
-        setUser(user);
     }, [])
 
-    async function click() {
+    const click = async () => {
         const res = await fetch(`http://localhost:${port}/subjects/`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -56,8 +47,11 @@ function Subjects({ subjects }) {
             <h1>Subjects</h1>
             <div>
                 <span className="p-float-label p-mt-4">
-                    <InputText value={name} onChange={(e) => setName(e.target.value)} />
-                    <label htmlFor="inputtext">Name</label>
+                    <InputText id='name' value={name} onChange={(e) => {
+                        console.log(e.target.value)
+                        setName(e.target.value)
+                    }} />
+                    <label htmlFor="name">Name</label>
                 </span>
                 <Button
                     icon='pi pi-plus'
@@ -76,7 +70,17 @@ function Subjects({ subjects }) {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req: { headers: { cookie } } }) {
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
+
     const res = await fetch(`http://localhost:${port}/subjects`, {
         method: "GET"
     })
@@ -85,6 +89,7 @@ export async function getServerSideProps() {
 
     return {
         props: {
+            user,
             subjects
         }
     }

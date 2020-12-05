@@ -1,37 +1,27 @@
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import Container from '../components/Container';
 import port from '../helpers/port';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
-export default function SingIn() {
+export default function SignUp({user}) {
     const router = useRouter();
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [user, setUser] = useState();
     let toast;
 
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-
-        const user = await userResponse.json()
-        
+    useEffect(() => {
         if ('payload' in user) {
-            router.push('/')
+            router.push('/');
         }
-
-        setUser(user);
     }, [])
 
-    const singIn = async () => {
-        const res = await fetch(`http://localhost:${port}/auth/signIn`, {
+    const signUp = async () => {
+        const res = await fetch(`http://localhost:${port}/auth/signUp`, {
             credentials: 'include',
             method: 'POST',
             headers: {
@@ -56,6 +46,12 @@ export default function SingIn() {
         }
 
         if ('payload' in user) {
+            toast.show({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Account create',
+                life: 30000
+            })
             router.push('/');
         }
     }
@@ -70,14 +66,32 @@ export default function SingIn() {
             </div>
             <div className="p-field p-md-4 p-pl-0">
                 <span className="p-float-label">
-                    <InputText className={error !== '' ? 'p-invalid' : ''} id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <InputText id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <label htmlFor="password">Password</label>
                 </span>
             </div>
             <div className='p-mt-3'>
-                <Button label='Sing in' className='p-ml-3' onClick={singIn} />
+                <Button label='Sign up' className='p-ml-3' onClick={signUp} />
             </div>
             <Toast ref={(el) => toast = el} position='bottom-left' />
         </Container>
     )
+}
+
+export async function getServerSideProps({ req: { headers: { cookie } } }) {
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
+
+    return {
+        props : {
+            user
+        }
+    }
 }

@@ -8,31 +8,22 @@ import Header from '../../../components/header';
 import port from '../../../helpers/port';
 import { useRouter } from 'next/router';
 
-function Companions({ companions }) {
-    const [name, setName] = useState();
+function Companions({user, companions }) {
+    const [name, setName] = useState('');
     const [comps, setComps] = useState(companions);
-    const [user, setUser] = useState();
 
     const router = useRouter()
 
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-
-        const user = await userResponse.json()
-
+    useEffect(() => {
         if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
             router.push( '/' )
         }
-
-        setUser(user);
     }, [])
 
     async function click() {
         const res = await fetch(`http://localhost:${port}/companions/`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -76,7 +67,17 @@ function Companions({ companions }) {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req : {headers : {cookie}}}) {
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
+
     const res = await fetch(`http://localhost:${port}/companions`, {
         method: 'GET'
     })
@@ -85,6 +86,7 @@ export async function getServerSideProps() {
 
     return {
         props: {
+            user,
             companions
         }
     }

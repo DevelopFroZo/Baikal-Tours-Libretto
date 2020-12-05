@@ -7,22 +7,10 @@ import { Button } from 'primereact/button';
 import { useRouter } from 'next/router';
 import port from '../../helpers/port';
 
-const Event = ({ event }) => {
+const Event = ({ event, user }) => {
 
     const router = useRouter();
     moment.locale('ru')
-
-    const [user, setUser] = useState();
-
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-
-        const user = await userResponse.json()
-        setUser(user);
-    }, [])
 
     return (
         <Container>
@@ -64,15 +52,29 @@ const Event = ({ event }) => {
     )
 }
 
-export async function getServerSideProps({ query }) {
-
+export async function getServerSideProps({ query, req: { headers: { cookie } } }) {
     const eventId = query.id;
+
     const eventResponse = await fetch(`http://localhost:${port}/events/${eventId}`);
+
     const { payload: event } = await eventResponse.json();
+
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
+
+    console.log(user)
 
     return {
         props: {
-            event
+            event,
+            user
         }
     }
 }

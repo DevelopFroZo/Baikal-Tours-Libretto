@@ -10,7 +10,7 @@ import port from '../../../helpers/port';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 
-function Events({ eventsResponse, companions, subjects }) {
+function Events({ user, eventsResponse, companions, subjects }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [dateStart, setDateStart] = useState(new Date());
@@ -21,24 +21,14 @@ function Events({ eventsResponse, companions, subjects }) {
     const [addEvent, setAddEvent] = useState(false);
     const [events, setEvents] = useState(eventsResponse);
     const [file, setFile] = useState();
-    const [user, setUser] = useState();
 
     const router = useRouter()
-    
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
 
-        const user = await userResponse.json()
-
-        if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
-            router.push( '/' )
+    useEffect( () => {
+        if (user === undefined || 'error' in user || ('payload' in user && user.payload.role !== 'admin')) {
+            router.push('/')
         }
-
-        setUser(user);
-    }, [])
+    }, [] )
 
     async function click() {
         const body = {
@@ -53,6 +43,7 @@ function Events({ eventsResponse, companions, subjects }) {
 
         const res = await fetch(`http://localhost:${port}/events`, {
             method: 'POST',
+            credentials : 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -68,13 +59,12 @@ function Events({ eventsResponse, companions, subjects }) {
         const imageResponse = await fetch(`http://localhost:${port}/events/${id}/image`,
             {
                 method: 'POST',
+                credentials : 'include',
                 body: formData
             }
         )
 
         const jsn = await imageResponse.json()
-
-        console.log(jsn)
 
         const eventsRes = await fetch(`http://localhost:${port}/events`, {
             method: 'GET'
@@ -143,7 +133,17 @@ function Events({ eventsResponse, companions, subjects }) {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req: { headers: { cookie } } }) {
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
+
     const evnts = await fetch(`http://localhost:${port}/events`, {
         method: 'GET'
     });
@@ -175,6 +175,7 @@ export async function getServerSideProps() {
 
     return {
         props: {
+            user,
             eventsResponse: events,
             companions,
             subjects

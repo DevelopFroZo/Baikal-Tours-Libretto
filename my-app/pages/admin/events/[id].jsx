@@ -8,7 +8,7 @@ import { Button } from 'primereact/button';
 import { useRouter } from 'next/router'
 import styles from './style.module.scss';
 
-function Event({ event, companions, subjects }) {
+function Event({ user, event, companions, subjects }) {
     const [name, setName] = useState(event.name);
     const [description, setDescription] = useState(event.description);
     const [dateStart, setDateStart] = useState(new Date(event.date_start));
@@ -16,21 +16,11 @@ function Event({ event, companions, subjects }) {
     const [cmpns, setCmpns] = useState(event.companions);
     const [location, setLocaton] = useState(event.location);
     const [sbjcts, setSbjcts] = useState(event.subjects);
-    const [user, setUser] = useState();
 
-    useEffect(async () => {
-        const userResponse = await fetch(`http://localhost:${port}/users/current`, {
-            method: 'GET',
-            credentials: 'include'
-        })
-
-        const user = await userResponse.json()
-
-        if( user === undefined || 'error' in user || ( 'payload' in user && user.payload.role !== 'admin' ) ){
-            router.push( '/' )
+    useEffect(() => {
+        if (user === undefined || 'error' in user || ('payload' in user && user.payload.role !== 'admin')) {
+            router.push('/')
         }
-
-        setUser(user);
     }, [])
 
     const router = useRouter()
@@ -48,17 +38,23 @@ function Event({ event, companions, subjects }) {
             companions: cmpns.map(el => el.id),
             location,
             subjects: sbjcts.map(el => el.id),
+            image_path: event.image_path
         };
 
         const res = await fetch(`http://localhost:${port}/events/${event.id}`, {
             method: 'PUT',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
         });
 
-        router.push(`/admin/events`);
+        const jsn = await res.json();
+
+        if ('payload' in jsn) {
+            router.push(`/admin/events`);
+        }
     }
 
     console.log(event)
@@ -106,8 +102,18 @@ function Event({ event, companions, subjects }) {
     )
 }
 
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req: { headers: { cookie } } }) {
     const id = query.id;
+
+    const userResponse = await fetch(`http://localhost:${port}/users/current`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            cookie
+        }
+    });
+
+    const user = await userResponse.json();
 
     const eventRes = await fetch(`http://localhost:${port}/events/${id}`, {
         method: 'GET'
@@ -127,6 +133,7 @@ export async function getServerSideProps({ query, req }) {
 
     return {
         props: {
+            user,
             event,
             companions,
             subjects
