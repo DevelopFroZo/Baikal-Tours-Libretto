@@ -16,6 +16,8 @@ def saveChainedEvent( chainedEvent: v2/Object!, ownerUserId: Int! ) = {
 
 def updateChainedEvent( id: Int!, chainedEvent: v2/Object! ) = chainedEvents.map( id ).set( 'events, chainedEvent.get( 'events ) )
 
+def deleteChainedEvent( id: Int! ) = chainedEvents.map( id ).remove()
+
 def getById( id: Int! ) = chainedEvents.keys as key.where( key == id ).( chainedEvents.map( key ) )
 
 def getChainedEventsByOwnerId( id: Int! ) = chainedEvents.keys as key.( chainedEvents.map( key ) ) as chainedEvent.where( chainedEvent.int( 'owner_user_id ) == id )

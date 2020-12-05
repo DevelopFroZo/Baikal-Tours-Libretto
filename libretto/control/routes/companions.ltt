@@ -68,8 +68,29 @@ def updateOne( id: Int!, companion: v2/Object! ): Any* = data/w: {
   }"
 }
 
+def deleteOne( id: Int! ): Any* = data/w: {
+  if( not auth/isAdmin ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
+  model/deleteCompanion( id )
+
+  jetx/out: json"{
+    "payload": null
+  }"
+}
+
 def home = {
+  fix id = jetx/params.inte( 'id )
+
   in/method.{
-    case 'PUT => updateOne( jetx/params.inte( 'id ), in/bodyText.json/parseObject )
+    case 'PUT => updateOne( id, in/bodyText.json/parseObject )
+    case 'DELETE => deleteOne( id )
   }
 }

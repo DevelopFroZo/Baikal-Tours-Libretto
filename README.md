@@ -30,6 +30,13 @@ def ROOT_SECRET = ""
 `body`:
 - `(string) name` - название
 
+`DELETE /companions/:id` - удалить _с кем пойти_ по `ID`
+
+`Access level`: `admin`
+
+`query`:
+- `(number) :id` - `ID` _с кем пойти_
+
 # 2. Тематики (`subjects`). Аналогично _с кем пойти_, но роут `/subjects`
 
 # 3. События (`events`)
@@ -92,6 +99,13 @@ payload type: {
 
 `body`: аналогично созданию
 
+`DELETE /events/:id` - удалить событие по `ID`
+
+`Access level`: `admin`
+
+`query`:
+- `(number) :id` - `ID` события
+
 `POST /events/:id/image` - создать картинку для события
 
 `query`:
@@ -135,6 +149,13 @@ payload type: [
 
 `body`:
 - `(number[]) events` - массив `ID` событий (`events`)
+
+`DELETE /chained-events/:id` - удалить цепочку событий по `ID`
+
+`Access level`: `user`
+
+`query`:
+- `(number) :id` - `ID` цепочки событий
 
 # 4. Авторизация (`auth`)
 `POST /auth/signUp` - зарегистрировать пользователя
