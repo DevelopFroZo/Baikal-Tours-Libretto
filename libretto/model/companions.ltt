@@ -17,3 +17,5 @@ def getCompanions = companions.keys as key.( companions.map( key ) )
 def getCompanions( idsAny: Any? ) = ( idsAny dyn #v2/Array ).contents as id.( companions.map( id ) )
 
 def updateCompanion( id: Int!, companion: v2/Object! ) = companions.map( id ).set( 'name, companion.get( 'name ) )
+
+def deleteCompanion( id: Int! ) = companions.map( id ).remove()

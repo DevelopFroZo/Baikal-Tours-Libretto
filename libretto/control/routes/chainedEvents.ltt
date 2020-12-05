@@ -96,8 +96,43 @@ def updateOne( id: Int!, chainedEvent: v2/Object! ): Any* = data/w: {
   }"
 }
 
+def deleteOne( id: Int! ): Any* = data/w: {
+  fix user = auth/currentUser
+
+  if( not user ){
+    jetx/out: json"{
+      "error": {
+        "message": "Unauthorized"
+      }
+    }"
+
+    return ()
+  }
+
+  fix isOwner = model/isOwnerChainedEvent( id, user.id dyn #Int! )
+
+  if( not isOwner ){
+    jetx/out: json"{
+      "error": {
+        "message": "Access denied"
+      }
+    }"
+
+    return ()
+  }
+
+  model/deleteChainedEvent( id )
+
+  jetx/out: json"{
+    "payload": null
+  }"
+}
+
 def home = {
+  fix id = jetx/params.inte( 'id )
+
   in/method.{
-    case 'PUT => updateOne( jetx/params.inte( 'id ), in/bodyText.json/parseObject )
+    case 'PUT => updateOne( id, in/bodyText.json/parseObject )
+    case 'DELETE => deleteOne( id )
   }
 }

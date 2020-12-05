@@ -36,5 +36,7 @@ def updateEvent( id: Int!, event: v2/Object! ) = {
   event_.set( 'subjects, event.get( 'subjects ) )
 }
 
+def deleteEvent( id: Int! ) = events.map( id ).remove()
+
 def checkEvent( id: Int! ) = events.map( id )
 def attachImageToEvent( id: Int!, imagePath: String? ) = events.map( id ).set( 'image_path, imagePath )
