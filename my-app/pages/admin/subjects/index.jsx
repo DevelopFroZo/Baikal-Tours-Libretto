@@ -58,7 +58,7 @@ function Subjects({ user, subjects }) {
 
     function renderDeleteButton(idx) {
         return (
-            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteSubs(idx)}/>
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteSubs(idx)} className="p-button-rounded p-button-text p-button-plain"/>
         );
     }
 

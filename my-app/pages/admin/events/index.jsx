@@ -111,7 +111,7 @@ function Events({ user, eventsResponse, companions, subjects }) {
 
     function renderDeleteButton(idx) {
         return (
-            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteEvent(idx)}/>
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteEvent(idx)} className="p-button-rounded p-button-text p-button-plain"/>
         );
     }
 

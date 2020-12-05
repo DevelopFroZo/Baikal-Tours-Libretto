@@ -58,7 +58,7 @@ function Companions({user, companions }) {
 
     function renderDeleteButton(idx) {
         return (
-            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteComps(idx)}/>
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteComps(idx)} className="p-button-rounded p-button-text p-button-plain"/>
         );
     }
 
