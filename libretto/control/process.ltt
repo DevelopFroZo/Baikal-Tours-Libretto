@@ -8,7 +8,8 @@ package control
 	use libretto/web/out
 
 def cors = {
-	out/headers!"Access-Control-Allow-Origin" = "*"
+	out/headers!"Access-Control-Allow-Origin" = "http://localhost:3000"
+	out/headers!"Access-Control-Allow-Credentials" = "true"
 
 	if( in/method == 'OPTIONS ){
     out/headers!"Access-Control-Allow-Methods" = "*"
