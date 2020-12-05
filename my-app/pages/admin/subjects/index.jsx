@@ -32,6 +32,10 @@ function Subjects({ user, subjects }) {
             })
         })
 
+        getSubs();
+    }
+
+    async function getSubs(){
         const subRes = await fetch(`http://localhost:${port}/subjects`, {
             method: "GET"
         })
@@ -39,6 +43,23 @@ function Subjects({ user, subjects }) {
         const jsn = await subRes.json();
 
         setSubs(jsn.payload);
+    }
+
+    async function deleteSubs(idx){
+        const res = await fetch(`http://localhost:${port}/subjects/${idx.id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        const jsn = await res.json();
+
+        getSubs();
+    }
+
+    function renderDeleteButton(idx) {
+        return (
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteSubs(idx)}/>
+        );
     }
 
     return (
@@ -64,6 +85,9 @@ function Subjects({ user, subjects }) {
                 <DataTable value={subs}>
                     <Column field='id' header='ID' sortable></Column>
                     <Column field='name' header='Name' sortable></Column>
+                    <Column body={idx => {
+                        return renderDeleteButton(idx);
+                    }} bodyStyle={{ textAlign: 'center' }} headerStyle={{ width: '4rem' }}/>
                 </DataTable>
             </div>
         </Container>

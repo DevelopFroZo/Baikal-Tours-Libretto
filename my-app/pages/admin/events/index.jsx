@@ -24,11 +24,11 @@ function Events({ user, eventsResponse, companions, subjects }) {
 
     const router = useRouter()
 
-    useEffect( () => {
+    useEffect(() => {
         if (user === undefined || 'error' in user || ('payload' in user && user.payload.role !== 'admin')) {
             router.push('/')
         }
-    }, [] )
+    }, [])
 
     async function click() {
         const body = {
@@ -43,7 +43,7 @@ function Events({ user, eventsResponse, companions, subjects }) {
 
         const res = await fetch(`http://localhost:${port}/events`, {
             method: 'POST',
-            credentials : 'include',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -59,13 +59,17 @@ function Events({ user, eventsResponse, companions, subjects }) {
         const imageResponse = await fetch(`http://localhost:${port}/events/${id}/image`,
             {
                 method: 'POST',
-                credentials : 'include',
+                credentials: 'include',
                 body: formData
             }
         )
 
         const jsn = await imageResponse.json()
 
+        getEvents();
+    }
+
+    async function getEvents(){
         const eventsRes = await fetch(`http://localhost:${port}/events`, {
             method: 'GET'
         });
@@ -92,6 +96,23 @@ function Events({ user, eventsResponse, companions, subjects }) {
 
     function onRowEditInit(e) {
         router.push(`/admin/events/${e.data.id}`);
+    }
+
+    async function deleteEvent(idx){
+        const res = await fetch(`http://localhost:${port}/events/${idx.id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        const jsn = await res.json();
+
+        getEvents();
+    }
+
+    function renderDeleteButton(idx) {
+        return (
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteEvent(idx)}/>
+        );
     }
 
     return (
@@ -126,7 +147,10 @@ function Events({ user, eventsResponse, companions, subjects }) {
                     <Column field='companions' header='Companions' className={styles.column}></Column>
                     <Column field='location' header='Location' className={styles.column}></Column>
                     <Column field='subjects' header='Subjects' className={styles.column}></Column>
-                    <Column rowEditor headerStyle={{ width: '7rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+                    <Column rowEditor headerStyle={{ width: '3rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+                    <Column body={idx => {
+                        return renderDeleteButton(idx);
+                    }} bodyStyle={{ textAlign: 'center' }} headerStyle={{ width: '4rem' }}/>
                 </DataTable>
             </div>
         </Container>
@@ -169,6 +193,7 @@ export async function getServerSideProps({ req: { headers: { cookie } } }) {
         el.date_end = moment(el.date_end).format('LL');
         el.subjects = el.subjects.map(el1 => el1.name).join(', ');
         el.companions = el.companions.map(el1 => el1.name).join(', ');
+        el.del = 'sdf';
 
         return el;
     });

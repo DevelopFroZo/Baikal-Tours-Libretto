@@ -32,6 +32,10 @@ function Companions({user, companions }) {
             })
         });
 
+        getComps();
+    }
+
+    async function getComps(){
         const compRes = await fetch(`http://localhost:${port}/companions/`, {
             method: 'GET',
         });
@@ -39,6 +43,23 @@ function Companions({user, companions }) {
         const jsn = await compRes.json();
 
         setComps(jsn.payload);
+    }
+
+    async function deleteComps(idx){
+        const res = await fetch(`http://localhost:${port}/companions/${idx.id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        const jsn = await res.json();
+
+        getComps();
+    }
+
+    function renderDeleteButton(idx) {
+        return (
+            <Button id='delete' icon='pi pi-times' onClick={(e) => deleteComps(idx)}/>
+        );
     }
 
     return (
@@ -61,6 +82,9 @@ function Companions({user, companions }) {
                 <DataTable value={comps}>
                     <Column field='id' header='ID' sortable></Column>
                     <Column field='name' header='Name' sortable></Column>
+                    <Column body={idx => {
+                        return renderDeleteButton(idx);
+                    }} bodyStyle={{ textAlign: 'center' }} headerStyle={{ width: '4rem' }}/>
                 </DataTable>
             </div>
         </Container>
