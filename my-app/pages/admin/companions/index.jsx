@@ -64,7 +64,10 @@ function Companions({user, companions }) {
 
     return (
         <Container>
-            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/companions' />
+            <Header
+                user={user} 
+                url='/admin/companions' 
+            />
             <h1>Companions</h1>
             <div>
                 <span className="p-float-label p-mt-4">

@@ -64,7 +64,10 @@ function Subjects({ user, subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/subjects' />
+            <Header
+                user={user} 
+                url='/admin/subjects' 
+            />
             <h1>Subjects</h1>
             <div>
                 <span className="p-float-label p-mt-4">

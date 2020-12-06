@@ -117,7 +117,10 @@ function Events({ user, eventsResponse, companions, subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/events' />
+            <Header
+                user={user} 
+                url='/admin/events' 
+            />
             <h1>Events</h1>
             {addEvent ? <div>
                 <Button icon='pi pi-minus' label='Add new event' className='p-mt-3 p-d-block' onClick={() => setAddEvent(false)} />

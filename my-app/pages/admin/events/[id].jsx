@@ -82,7 +82,10 @@ function Event({ user, event, companions, subjects }) {
 
     return (
         <Container>
-            <Header isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} url='/admin/events' />
+            <Header
+                user={user} 
+                url='/admin/events' 
+            />
             <h1>Event {event.id} ({name}):</h1>
             <img src={`http://localhost:${port}/${event.image_path}`} className={styles.img} />
             <EventEditor
