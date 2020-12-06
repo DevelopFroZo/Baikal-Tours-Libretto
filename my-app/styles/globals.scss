@@ -28,3 +28,18 @@ a {
 .container{
   width: $container;
 }
+
+.center-field{
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.dialog-overflow-hidden{
+
+  .p-dialog-content{
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+}

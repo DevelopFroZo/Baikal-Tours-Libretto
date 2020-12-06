@@ -14,7 +14,7 @@ const Event = ({ event, user }) => {
 
     return (
         <Container>
-            <Header url='/events' isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} />
+            <Header url='/events' user={user}/>
 
             <Button
                 icon='pi pi-arrow-left'

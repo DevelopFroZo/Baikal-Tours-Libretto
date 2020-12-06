@@ -7,9 +7,14 @@ import { useEffect, useState } from 'react';
 
 export default function Home({ events, user }) {
 
+  console.log(user)
+
   return (
     <Container>
-      <Header url='/' isAdmin={user !== undefined && 'payload' in user && user.payload.role === 'admin'} />
+      <Header 
+        url='/'
+        user={user}
+      />
 
       <ul className='m-mt-5 eventsList'>
         {events.map((el, i) =>
