@@ -33,10 +33,10 @@ const Event = ({ event, user }) => {
             <h2 className='p-mt-5 p-mb-3'>Информация</h2>
             <ul>
                 <li>
-                    <span><b>Дата начала: </b>{moment(event.date_start).format('LL')}</span>
+                    <span><b>Дата начала: </b>{moment(event.date_start * 1000).format('LL')}</span>
                 </li>
                 <li>
-                    <span><b>Дата окончания: </b>{moment(event.date_end).format('LL')}</span>
+                    <span><b>Дата окончания: </b>{moment(event.date_end * 1000).format('LL')}</span>
                 </li>
                 <li>
                     <span><b>Тематики: </b>{event.subjects.map(el => el.name).join(', ')}</span>

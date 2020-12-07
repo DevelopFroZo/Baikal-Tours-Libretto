@@ -11,8 +11,8 @@ import styles from './style.module.scss';
 function Event({ user, event, companions, subjects }) {
     const [name, setName] = useState(event.name);
     const [description, setDescription] = useState(event.description);
-    const [dateStart, setDateStart] = useState(new Date(event.date_start));
-    const [dateEnd, setDateEnd] = useState(new Date(event.date_end));
+    const [dateStart, setDateStart] = useState(new Date(event.date_start * 1000));
+    const [dateEnd, setDateEnd] = useState(new Date(event.date_end * 1000));
     const [cmpns, setCmpns] = useState(event.companions);
     const [location, setLocaton] = useState(event.location);
     const [sbjcts, setSbjcts] = useState(event.subjects);

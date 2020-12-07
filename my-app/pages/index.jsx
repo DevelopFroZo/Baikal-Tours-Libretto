@@ -7,8 +7,6 @@ import { useEffect, useState } from 'react';
 
 export default function Home({ events, user }) {
 
-  console.log(user)
-
   return (
     <Container>
       <Header 

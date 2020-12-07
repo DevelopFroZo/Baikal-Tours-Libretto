@@ -79,8 +79,8 @@ function Events({ user, eventsResponse, companions, subjects }) {
         moment.locale('ru');
 
         evnts = evnts.map(el => {
-            el.date_start = moment(el.date_start).format('LL');
-            el.date_end = moment(el.date_end).format('LL');
+            el.date_start = moment(el.date_start * 1000).format('LL');
+            el.date_end = moment(el.date_end * 1000).format('LL');
             el.subjects = el.subjects.map(el1 => el1.name).join(', ');
             el.companions = el.companions.map(el1 => el1.name).join(', ');
 
@@ -192,8 +192,8 @@ export async function getServerSideProps({ req: { headers: { cookie } } }) {
     moment.locale('ru');
 
     events = events.map(el => {
-        el.date_start = moment(el.date_start).format('LL');
-        el.date_end = moment(el.date_end).format('LL');
+        el.date_start = moment(el.date_start * 1000).format('LL');
+        el.date_end = moment(el.date_end * 1000).format('LL');
         el.subjects = el.subjects.map(el1 => el1.name).join(', ');
         el.companions = el.companions.map(el1 => el1.name).join(', ');
         el.del = 'sdf';
