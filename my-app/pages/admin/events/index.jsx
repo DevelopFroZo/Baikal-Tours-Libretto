@@ -34,8 +34,8 @@ function Events({ user, eventsResponse, companions, subjects }) {
         const body = {
             name,
             description,
-            date_start: moment(dateStart).valueOf() / 1000,
-            date_end: moment(dateEnd).valueOf() / 1000,
+            date_start: moment(dateStart).valueOf(),
+            date_end: moment(dateEnd).valueOf(),
             companions: cmpns.map(el => el.id),
             location,
             subjects: sbjcts.map(el => el.id),
@@ -79,8 +79,8 @@ function Events({ user, eventsResponse, companions, subjects }) {
         moment.locale('ru');
 
         evnts = evnts.map(el => {
-            el.date_start = moment(el.date_start * 1000).format('LL');
-            el.date_end = moment(el.date_end * 1000).format('LL');
+            el.date_start = Math.floor( moment(el.date_start * 1000).format('LL') );
+            el.date_end = Math.floor( moment(el.date_end * 1000).format('LL') );
             el.subjects = el.subjects.map(el1 => el1.name).join(', ');
             el.companions = el.companions.map(el1 => el1.name).join(', ');
 
