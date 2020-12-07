@@ -33,8 +33,8 @@ function Event({ user, event, companions, subjects }) {
         const body = {
             name,
             description,
-            date_start: moment(dateStart).valueOf(),
-            date_end: moment(dateEnd).valueOf(),
+            date_start: moment(dateStart).valueOf() / 1000,
+            date_end: moment(dateEnd).valueOf() / 1000,
             companions: cmpns.map(el => el.id),
             location,
             subjects: sbjcts.map(el => el.id),
